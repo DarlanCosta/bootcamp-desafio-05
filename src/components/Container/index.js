@@ -18,6 +18,11 @@ const Container = styled.div`
       margin-right: 10px;
     }
   }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 export default Container;

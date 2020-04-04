@@ -10,6 +10,33 @@ export const Loading = styled.div`
   height: 100vh;
 `;
 
+export const Footer = styled.div`
+  color: #fff;
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 25vh;
+`;
+
+export const ButtonPag = styled.button`
+  background: #eee;
+  border: 1;
+  padding: 0 15px;
+  width: 60px;
+  height: 20px;
+  margin-left: 10px;
+  border-radius: 4px;
+  color: #000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: ${props => (props.disabled ? 0.5 : 1)};
+`;
+
 export const Owner = styled.header`
   display: flex;
   flex-direction: column;
@@ -38,6 +65,35 @@ export const Owner = styled.header`
     line-height: 1.4;
     text-align: center;
     max-width: 400px;
+  }
+`;
+
+export const Header = styled.div`
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+
+  h3 {
+    padding: 10px;
+  }
+
+  strong {
+    color: #aaa;
+    border: 2px solid #eee;
+  }
+
+  input {
+    font-weight: bold;
+    /* padding: 50px; */
+    margin-right: 5px;
+
+    & + input {
+      margin-left: 20px;
+    }
+  }
+
+  div {
+    padding: 15px;
   }
 `;
 

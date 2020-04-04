@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import Container from '../../components/Container';
 
-import { Form, SubmitButton, List } from './styles';
+import { Form, SubmitButton, List, InputRepo } from './styles';
 
 export default class Main extends Component {
   // eslint-disable-next-line react/state-in-constructor
@@ -12,6 +12,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    erro: false,
   };
 
   // Carregar os dados do localStorage
@@ -37,27 +38,40 @@ export default class Main extends Component {
   };
 
   handleSubmit = async e => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      const { newRepo, repositories } = this.state;
 
-    this.setState({ loading: true });
+      if (repositories.length > 0) {
+        const getRepos = JSON.parse(localStorage.getItem('repositories'));
 
-    const { newRepo, repositories } = this.state;
+        if (getRepos.filter(filtro => filtro.name === newRepo).length > 0) {
+          throw new Error('Repositório duplicado');
+        }
+      }
 
-    const response = await api.get(`/repos/${newRepo}`);
+      this.setState({ loading: true });
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const response = await api.get(`/repos/${newRepo}`);
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      const data = {
+        name: response.data.full_name,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+        erro: false,
+      });
+    } catch (error) {
+      this.setState({ loading: false, newRepo: '', erro: true });
+      console.log(error);
+    }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, erro } = this.state;
     return (
       <Container>
         <h1>
@@ -66,14 +80,15 @@ export default class Main extends Component {
         </h1>
 
         <Form onSubmit={this.handleSubmit}>
-          <input
+          <InputRepo
+            erro={erro}
             type="text"
             placeholder="Adicionar repositório"
             value={newRepo}
             onChange={this.handleInputChange}
           />
 
-          <SubmitButton loading={loading}>
+          <SubmitButton load={loading}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
